@@ -55,8 +55,8 @@ elab-meeting-sys/
 ├── web-meeting/                 # 会议台前端
 ├── web-voice/                   # 语音直播前端
 ├── scripts/                     # 安装与启动脚本
-├── models/                      # 模型权重（需自行下载，不入库）
-└── data/                        # 数字人素材、数据库（不入库）
+├── models/                      # Wav2Lip 模型权重（Git LFS）
+└── data/                        # 数字人素材、会议数据库
 ```
 
 ## 环境要求
@@ -65,7 +65,7 @@ elab-meeting-sys/
 - Node.js 18+
 - （推荐）NVIDIA GPU + CUDA，用于 Wav2Lip 口型推理与 Whisper ASR
 - 阿里云 DashScope API Key（通义千问）
-- 自签名 HTTPS 证书（`ssl_certs/`，前端 dev 与后端 :3080 共用）
+- 自签名 HTTPS 证书（`ssl_certs/`，已入库；也可 `bash scripts/create_ssl_certs.sh` 重新生成）
 
 ## 快速开始
 

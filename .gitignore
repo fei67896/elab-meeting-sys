@@ -47,39 +47,35 @@ uv.lock
 *.sublime-workspace
 
 # Project specific
-models/
-data/
 logs/
 outputs/
-*.pt
-*.pth
-*.ckpt
-
-# Recordings
 data/records/
 
-# Certificates
+# Other weight formats (models/wav2lip.pth tracked via Git LFS)
+*.pt
+*.ckpt
+
+# Production certs only; dev HTTPS certs live in ssl_certs/
 certs/
 *.pem
 *.key
 *.crt
+!ssl_certs/
+!ssl_certs/**
 
 # Temporary files
 *.tmp
 *.log
 .cache/
+*:Zone.Identifier
 
 # Node / frontend
 node_modules/
 **/dist/
 .pnpm-store/
 
-# Local DB (meeting secretary)
-data/meeting.db
+# SQLite WAL sidecars (main DB is tracked)
 data/meeting.db-*
-
-# Dev SSL (regenerate locally)
-ssl_certs/
 
 src/omni/
 
