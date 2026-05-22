@@ -19,6 +19,9 @@ export function canUseBrowserSpeech() {
 }
 
 export function speechEngineLabel() {
+  if (typeof window !== 'undefined' && /Edg\//i.test(navigator.userAgent || '')) {
+    return '服务端 Whisper（Edge 推荐路径）'
+  }
   return canUseBrowserSpeech()
     ? '浏览器语音识别 (Chrome 推荐)'
     : '服务端 Whisper (Edge / 备用)'

@@ -2,10 +2,8 @@
   <img
     src="/logo-fudan.png"
     class="live-brand"
-    :class="`live-brand--${size}`"
+    :class="[`live-brand--${size}`, tone === 'light' && 'live-brand--light']"
     :alt="alt"
-    width="40"
-    height="40"
     decoding="async"
   />
 </template>
@@ -16,6 +14,11 @@ defineProps({
     type: String,
     default: 'md',
     validator: (v) => ['sm', 'md', 'lg'].includes(v),
+  },
+  tone: {
+    type: String,
+    default: 'light',
+    validator: (v) => ['light', 'color'].includes(v),
   },
   alt: {
     type: String,
@@ -29,12 +32,13 @@ defineProps({
   display: block;
   flex-shrink: 0;
   object-fit: contain;
-  border-radius: 50%;
-  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.35));
+}
+.live-brand--light {
+  filter: brightness(0) invert(1) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.45));
 }
 .live-brand--sm {
-  width: 32px;
-  height: 32px;
+  height: 1.5em;
+  width: auto;
 }
 .live-brand--md {
   width: 40px;

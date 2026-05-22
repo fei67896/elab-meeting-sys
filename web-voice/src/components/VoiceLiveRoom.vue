@@ -171,10 +171,10 @@
             class="live-panel-btn live-panel-btn--right"
             :class="{ 'is-open': showFocus }"
             :aria-expanded="showFocus"
-            :title="showFocus ? '收起专注度' : '展开专注度'"
+            :title="showFocus ? '收起专注历史' : '展开专注历史'"
             @click="toggleFocus"
           >
-            <span class="live-panel-btn__label">专注度</span>
+            <span class="live-panel-btn__label">专注历史</span>
             <svg class="live-panel-btn__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M9 18l6-6-6-6" />
             </svg>
@@ -192,6 +192,24 @@
         </aside>
       </div>
     </div>
+    <footer class="live-room__credit" aria-label="演示说明与致谢">
+      <div class="live-room__credit-row">
+        <span class="live-room__credit-tag">DEMO</span>
+        <span class="live-room__credit-sep" aria-hidden="true">·</span>
+        <span>复旦大学</span>
+        <span class="live-room__credit-sep" aria-hidden="true">·</span>
+        <span>非商用</span>
+        <span class="live-room__credit-sep" aria-hidden="true">·</span>
+        <span>赵一飞信息</span>
+      </div>
+      <p class="live-room__thanks">
+        <span class="live-room__thanks-label">感谢本项目用到的库：</span>
+        <template v-for="(lib, index) in ackLibraries" :key="lib">
+          <span>{{ lib }}</span>
+          <span v-if="index < ackLibraries.length - 1" class="live-room__credit-sep" aria-hidden="true">·</span>
+        </template>
+      </p>
+    </footer>
   </div>
 </template>
 
@@ -207,6 +225,21 @@ import { useAvatarVideoAudio } from '@shared/composables/useAvatarVideoAudio'
 
 const meetStripRef = ref(null)
 const focusStripRef = ref(null)
+
+const ackLibraries = [
+  'Linly-Talker-Stream',
+  'Linly-Talker',
+  'LiveTalking',
+  'Vue 3',
+  'Vite',
+  'aiohttp',
+  'aiortc',
+  'Wav2Lip',
+  'Whisper',
+  'edge-tts',
+  '通义千问',
+]
+
 const showMeetings = ref(false)
 const showFocus = ref(false)
 const meetPanelMounted = ref(false)
@@ -321,6 +354,7 @@ onBeforeUnmount(() => {
 .live-room {
   min-height: 100dvh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: var(--color-surface);
@@ -328,8 +362,57 @@ onBeforeUnmount(() => {
     env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
+.live-room__credit {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  font-size: 11px;
+  color: var(--color-text-3);
+  letter-spacing: 0.02em;
+  user-select: none;
+}
+.live-room__credit-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.live-room__thanks {
+  margin: 0;
+  max-width: min(920px, 100%);
+  text-align: center;
+  line-height: 1.5;
+  font-size: 10px;
+  color: var(--color-text-3);
+}
+.live-room__thanks-label {
+  color: var(--color-text-2);
+}
+.live-room__credit-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 7px;
+  border-radius: var(--radius-pill);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-2);
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border);
+}
+.live-room__credit-sep {
+  opacity: 0.45;
+}
+
 /* 数字人居中固定，侧栏向左右外侧展开 */
 .live-room__cluster {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -591,9 +674,11 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: 8px;
   min-width: 0;
+  font-size: var(--fs-h4);
+  line-height: 1;
 }
 .live-stage__title {
-  font-size: var(--fs-h4);
+  font-size: inherit;
   font-weight: 600;
   color: #fff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);

@@ -32,10 +32,10 @@ tts:
   ref_file: zh-CN-XiaoxiaoNeural  # 女声（晓晓）；男声可用 zh-CN-YunxiNeural
 
 asr:
-  mode: auto  # browser | server | auto (会议秘书前端: Chrome 用浏览器识别, 否则服务端)
-  type: whisper  # whisper | funasr
-  model_size: tiny  # tiny 更快; base 更准
-  language: zh  # zh | en | auto
+  mode: server  # Edge 等浏览器走 MediaRecorder + 服务端; Chrome 前端也会降级到此路径
+  type: whisper  # whisper | funasr（中文可试 funasr，需 pip install funasr）
+  model_size: medium  # tiny 快 / small 平衡 / medium 更准（Edge 服务端推荐）
+  language: zh
   device: cuda  # auto | cpu | cuda
 
 llm:

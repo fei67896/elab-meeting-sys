@@ -82,8 +82,10 @@ onMounted(() => ensureLoaded())
   min-height: 280px;
   padding: var(--space-3);
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(12px) saturate(1.15);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15);
+  border: 1px solid rgba(255, 255, 255, 0.42);
   box-shadow: var(--shadow-1);
 }
 
@@ -145,13 +147,13 @@ onMounted(() => ensureLoaded())
   border-radius: var(--radius);
   text-decoration: none;
   color: inherit;
-  background: var(--color-surface);
-  border: 1px solid transparent;
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
 }
 .meet-strip__item:hover {
-  border-color: var(--color-border);
-  background: var(--color-surface-2);
+  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.58);
 }
 
 .meet-strip__time {

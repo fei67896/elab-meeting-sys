@@ -1,7 +1,7 @@
 <template>
-  <aside class="focus-strip" aria-label="会议专注度历史">
+  <aside class="focus-strip" aria-label="专注历史">
     <header class="focus-strip__head">
-      <h2 class="focus-strip__title">专注度</h2>
+      <h2 class="focus-strip__title">专注历史</h2>
       <button type="button" class="focus-strip__refresh" title="刷新" @click="loadFocusHistory()">
         ↻
       </button>
@@ -89,8 +89,10 @@ onMounted(() => ensureLoaded())
   min-height: 280px;
   padding: var(--space-3);
   border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.96);
-  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.58);
+  backdrop-filter: blur(12px) saturate(1.15);
+  -webkit-backdrop-filter: blur(12px) saturate(1.15);
+  border: 1px solid rgba(255, 255, 255, 0.42);
   box-shadow: var(--shadow-1);
 }
 
@@ -153,8 +155,8 @@ onMounted(() => ensureLoaded())
 .focus-card {
   padding: var(--space-2);
   border-radius: var(--radius);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.35);
 }
 
 .focus-card__head {

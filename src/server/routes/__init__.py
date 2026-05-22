@@ -14,6 +14,7 @@ from .legacy import (
 )
 from .meeting import (
     secretary_command,
+    secretary_mcp_cards,
     secretary_history,
     list_meetings,
     create_meeting,
@@ -47,6 +48,7 @@ __all__ = [
     'logout',
     'me',
     'secretary_command',
+    'secretary_mcp_cards',
     'secretary_history',
     'list_meetings',
     'create_meeting',

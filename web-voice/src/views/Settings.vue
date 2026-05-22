@@ -9,7 +9,13 @@
       <h2 class="settings__h2">语音输入</h2>
       <p class="text-small">{{ engineLabel }}</p>
       <p class="text-tiny text-muted">
-        Chrome 推荐使用浏览器语音识别；Edge 等环境将自动走服务端 Whisper 转写。
+        <template v-if="isEdge">
+          Microsoft Edge 使用<strong>服务端 Whisper</strong>转写（录音结束后识别），不用浏览器内置语音。
+          说完再松手，识别中按钮会稍等片刻。
+        </template>
+        <template v-else>
+          Chrome 推荐使用浏览器语音识别；其它浏览器将走服务端 Whisper 转写。
+        </template>
       </p>
 
       <h2 class="settings__h2">数字人连接</h2>
@@ -37,6 +43,7 @@ import { useWebRTC } from '@shared/composables/useWebRTC'
 import { speechEngineLabel } from '@shared/utils/speech'
 
 const engineLabel = speechEngineLabel()
+const isEdge = typeof navigator !== 'undefined' && /Edg\//i.test(navigator.userAgent || '')
 const { connectionState, sessionId } = useWebRTC()
 </script>
 

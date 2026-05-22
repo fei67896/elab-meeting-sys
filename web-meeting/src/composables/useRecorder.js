@@ -50,7 +50,12 @@ export function useRecorder() {
 
     try {
       stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true, channelCount: 1 },
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          channelCount: 1,
+          sampleRate: 16000,
+        },
         video: false,
       })
       const mime = pickMime()
