@@ -63,24 +63,43 @@ elab-meeting-sys/
 
 - Python 3.10–3.11
 - Node.js 18+
+- [Git LFS](https://git-lfs.com/)（拉取 `models/wav2lip.pth` 大文件）
 - （推荐）NVIDIA GPU + CUDA，用于 Wav2Lip 口型推理与 Whisper ASR
 - 阿里云 DashScope API Key（通义千问）
 - 自签名 HTTPS 证书（`ssl_certs/`，已入库；也可 `bash scripts/create_ssl_certs.sh` 重新生成）
 
+## 仓库已包含 / 需本机准备
+
+| 内容 | 位置 | 说明 |
+|------|------|------|
+| Wav2Lip 权重 | `models/wav2lip.pth` | Git LFS，clone 后需 `git lfs pull` |
+| 数字人素材 | `data/avatars/` | 已入库，含当前形象 `wav2lip_secretary_weixin` |
+| 会议数据库 | `data/meeting.db` | 已入库，含示例会议与历史专注度 |
+| HTTPS 证书 | `ssl_certs/` | 已入库 |
+| Whisper 权重 | `~/.cache/whisper/` | **不在仓库**，首次启动后端自动下载 `medium`（约 1.4GB） |
+| API Key | `.env` | **不在仓库**，从 `.env.example` 复制后填入 |
+
 ## 快速开始
 
-### 1. 克隆与 Python 环境
+### 1. 克隆、拉取 LFS 与 Python 环境
 
 ```bash
 git clone https://github.com/fei67896/elab-meeting-sys.git
 cd elab-meeting-sys
 
+# 拉取大文件（wav2lip.pth 约 205MB；未执行则只有几 KB 的 LFS 指针）
+git lfs install
+git lfs pull
+
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
+pip install -e src/avatars/wav2lip/
 ```
 
-> 完整 Wav2Lip 依赖可参考原项目 [README_zh.md](./README_zh.md) 与 `scripts/` 下的安装脚本。
+> 完整 Wav2Lip / PyTorch 依赖可参考 [README_zh.md](./README_zh.md) 与 `scripts/setup-env.sh`。RTX 50 系显卡需 PyTorch nightly cu128，勿用 `uv run` 以免版本被回退。
+
+> 若已有另一台机器下载过 Whisper，可复制缓存以跳过下载：`scp -r 旧机:~/.cache/whisper/ ~/.cache/whisper/`
 
 ### 2. 配置密钥
 
@@ -103,7 +122,7 @@ set -a && source .env && set +a   # 若使用 .env
 python src/server/app.py --config config/config_wav2lip.yaml
 ```
 
-首次启动会下载 Whisper `medium` 权重（约 1.4GB），请预留时间与磁盘空间。
+首次启动会下载 Whisper `medium` 到 `~/.cache/whisper/medium.pt`（约 1.4GB），请预留时间与磁盘空间；之后启动直接读缓存，不再重复下载。
 
 ### 4. 启动前端
 
