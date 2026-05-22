@@ -1,0 +1,59 @@
+[project]
+name = "linly-talker-stream"
+version = "0.1.0"
+description = "Linly-Talker-Stream: 实时流式数字人对话系统 - 模块化多 Avatar 支持，基于 WebRTC 的全双工交互"
+readme = "README.md"
+requires-python = ">=3.10, <3.12"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Kedreamix", email = "kedreamix@gmail.com" }
+]
+
+dependencies = [
+    "aiohttp",
+    "aiohttp-cors",
+    "aiortc",
+    "av",
+    "edge-tts",
+    "librosa",
+    "omegaconf",
+    "openai",
+    "numpy>=1.26,<3",
+    "opencv-python-headless<4.12",
+    "pydantic",
+    "PyYAML",
+    "scipy",
+    "soundfile==0.12.1",
+    "torch",
+    "torchvision",
+    "torchaudio",
+    "tqdm",
+    "typing-extensions",
+    "websockets==12.0",
+    "resampy",
+    "azure-cognitiveservices-speech",
+    "logger",
+    "transformers==4.46.0",
+    "aiosqlite",
+    "openai-whisper",
+    "zhconv",
+]
+
+[tool.uv.sources]
+torch = [
+    { index = "pytorch-cu128" },
+]
+torchvision = [
+    { index = "pytorch-cu128" },
+]
+torchaudio = [
+    { index = "pytorch-cu128" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/nightly/cu128"
+explicit = true
+[tool.uv]
+# WSL2 / Linux 服务器场景，只解 linux 平台，避免 darwin/windows 找不到 cu124 wheel
+environments = ["sys_platform == 'linux'"]

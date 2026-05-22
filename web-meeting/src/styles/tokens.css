@@ -1,0 +1,114 @@
+/* Studio · 浅色工作台设计系统
+ * 灵感: Linear / Vercel / Stripe Dashboard
+ * 原则: 高对比、极简、留白、无渐变无发光
+ */
+
+:root {
+  /* ============ 颜色 ============ */
+  --color-bg:            #ffffff;
+  --color-surface:       #fcfcfa;        /* 暖白页面底 */
+  --color-surface-2:     #f5f5f3;        /* 嵌套区 / hover */
+  --color-surface-3:     #ebebe8;        /* 分隔块 */
+
+  --color-border:        rgba(10, 10, 10, 0.08);
+  --color-border-strong: rgba(10, 10, 10, 0.16);
+
+  --color-text:          #0a0a0a;
+  --color-text-2:        #525252;
+  --color-text-3:        #a3a3a3;
+  --color-text-inverse:  #fafafa;
+
+  /* 主操作色 = 纯黑(Vercel/Linear 风) */
+  --color-primary:       #0a0a0a;
+  --color-primary-soft:  rgba(10, 10, 10, 0.06);
+  --color-primary-hover: #262626;
+
+  /* 强调色 = 靛蓝(用于链接 / 聚焦 / 选中) */
+  --color-accent:        #4f46e5;
+  --color-accent-2:      #6366f1;
+  --color-accent-soft:   rgba(79, 70, 229, 0.08);
+  --color-accent-ring:   rgba(79, 70, 229, 0.18);
+
+  /* AI 在线状态色 */
+  --color-live:          #10b981;
+  --color-live-soft:     rgba(16, 185, 129, 0.1);
+
+  --color-success:       #10b981;
+  --color-success-soft:  rgba(16, 185, 129, 0.1);
+  --color-warning:       #d97706;
+  --color-warning-soft:  rgba(217, 119, 6, 0.1);
+  --color-danger:        #dc2626;
+  --color-danger-soft:   rgba(220, 38, 38, 0.08);
+
+  /* ============ 字体 ============ */
+  --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                'PingFang SC', 'Helvetica Neue', sans-serif;
+  --font-serif: var(--font-sans);
+  --font-mono:  'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* ============ 字号 ============ */
+  --fs-display: 30px;
+  --fs-h1:      24px;
+  --fs-h2:      18px;
+  --fs-h3:      16px;
+  --fs-h4:      14px;
+  --fs-body:    14px;
+  --fs-small:   13px;
+  --fs-tiny:    12px;
+
+  --lh-tight:   1.2;
+  --lh-snug:    1.4;
+  --lh-body:    1.55;
+  --lh-loose:   1.7;
+
+  /* ============ 间距 ============ */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 28px;
+  --space-7: 40px;
+  --space-8: 56px;
+
+  /* ============ 圆角 (统一克制) ============ */
+  --radius-sm: 6px;
+  --radius:    8px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+  --radius-pill: 999px;
+
+  /* ============ 阴影 (极克制) ============ */
+  --shadow-1: 0 1px 0 rgba(10, 10, 10, 0.04),
+              0 1px 2px rgba(10, 10, 10, 0.04);
+  --shadow-2: 0 4px 12px rgba(10, 10, 10, 0.06),
+              0 1px 2px rgba(10, 10, 10, 0.04);
+  --shadow-3: 0 12px 32px rgba(10, 10, 10, 0.10),
+              0 4px 8px rgba(10, 10, 10, 0.04);
+
+  /* ============ 兼容旧 token 别名 ============ */
+  --color-primary-2:     var(--color-accent);
+  --color-glow:          transparent;
+  --shadow-glow:         none;
+  --ai-fill:             rgba(10, 10, 10, 0.04);
+  --ai-fill-secondary:   rgba(10, 10, 10, 0.03);
+  --ai-separator:        rgba(10, 10, 10, 0.08);
+  --ai-blur:             saturate(180%) blur(16px);
+
+  /* ============ 布局 ============ */
+  --content-max: 1200px;
+  --sidebar-w:   260px;
+  --header-h:    56px;
+  /* 数字人视频 (与 wav2lip_secretary_weixin 源素材一致) */
+  --avatar-aspect: 720 / 1192;
+  --avatar-aside-w: 400px;
+
+  /* ============ 动画 ============ */
+  --ease:        cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast:    120ms;
+  --dur:         200ms;
+  --dur-slow:    320ms;
+
+  color-scheme: light;
+}

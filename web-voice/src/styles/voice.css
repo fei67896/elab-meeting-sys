@@ -1,0 +1,10 @@
+/* web-voice：抖音直播式全屏对话 */
+
+html, body, #app {
+  min-height: 100%;
+  min-height: 100dvh;
+}
+
+body {
+  overflow: hidden;
+}

@@ -1,0 +1,200 @@
+/**
+ * Studio · 页面级组件
+ * 命名仍带 .ai- 前缀以兼容现有模板, 但视觉是 Studio 风格
+ */
+
+.ai-page,
+.feed-ai,
+.feed-light {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- 标题: 纯文字, 无渐变 ---- */
+.ai-large-title {
+  margin: 0;
+  font-size: var(--fs-display);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: var(--lh-tight);
+  color: var(--color-text);
+}
+
+.ai-subtitle {
+  margin: var(--space-1) 0 0;
+  font-size: var(--fs-small);
+  line-height: var(--lh-snug);
+  color: var(--color-text-2);
+}
+
+/* ---- 顶部小标签 (eyebrow): 大写 + 字间距 ---- */
+.ai-eyebrow {
+  margin: 0 0 var(--space-2);
+  font-size: var(--fs-tiny);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-3);
+}
+
+.ai-link {
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--color-text-2);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease);
+}
+.ai-link:hover {
+  color: var(--color-text);
+}
+
+.ai-panel {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* ---- 分段控件: 极简下划线版 ---- */
+.ai-segmented {
+  display: flex;
+  gap: 0;
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ai-segmented__btn {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  padding: 12px 8px;
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--color-text-2);
+  cursor: pointer;
+  position: relative;
+  transition: color var(--dur-fast) var(--ease);
+}
+.ai-segmented__btn:hover {
+  color: var(--color-text);
+}
+.ai-segmented__btn.is-active {
+  color: var(--color-text);
+  font-weight: 600;
+}
+.ai-segmented__btn.is-active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--color-text);
+  border-radius: 1px;
+}
+
+/* ---- 嵌入式说明块 ---- */
+.ai-inset {
+  margin: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: var(--fs-small);
+  line-height: var(--lh-snug);
+  color: var(--color-text-2);
+}
+
+/* ---- AI 回复 callout: 左边线 ---- */
+.ai-callout {
+  margin: var(--space-3) var(--space-4) 0;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border-left: 3px solid var(--color-text);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: var(--fs-small);
+  line-height: var(--lh-body);
+  color: var(--color-text);
+}
+
+.ai-footnote {
+  margin: var(--space-4) 0 0;
+  text-align: center;
+  font-size: var(--fs-tiny);
+  color: var(--color-text-3);
+}
+
+/* ---- 快捷操作: 横排卡片化 ---- */
+.ai-action-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+}
+
+.ai-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: var(--space-3) var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: var(--fs-tiny);
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease),
+              background var(--dur-fast) var(--ease),
+              transform var(--dur-fast) var(--ease);
+}
+.ai-action-btn:hover:not(:disabled) {
+  border-color: var(--color-border-strong);
+  background: var(--color-surface);
+}
+.ai-action-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+.ai-action-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.ai-action-btn.is-destructive {
+  color: var(--color-danger);
+  border-color: var(--color-border);
+}
+.ai-action-btn.is-destructive:hover:not(:disabled) {
+  background: var(--color-danger-soft);
+  border-color: var(--color-danger);
+}
+.ai-action-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.6;
+}
+
+/* ---- 在线状态点: 翠绿心跳 ---- */
+.ai-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-live);
+  display: inline-block;
+  position: relative;
+}
+.ai-status-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid var(--color-live);
+  opacity: 0.6;
+  animation: ai-ring 1.6s ease-out infinite;
+}
+@keyframes ai-ring {
+  0%   { transform: scale(0.6); opacity: 0.6; }
+  100% { transform: scale(1.8); opacity: 0; }
+}

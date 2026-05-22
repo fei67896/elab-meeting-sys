@@ -1,0 +1,10 @@
+/* 可滚动但隐藏滚动条（仍支持触控板/鼠标滚轮） */
+.hidden-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hidden-scroll::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}

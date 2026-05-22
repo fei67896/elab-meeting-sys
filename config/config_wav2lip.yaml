@@ -1,0 +1,56 @@
+# 开发环境配置
+app:
+  listenport: 3080          # 后端 (HTTPS)
+  max_session: 1
+  
+  ssl: true
+  ssl_cert: ssl_certs/localhost.crt
+  ssl_key: ssl_certs/localhost.key
+  
+  # 原 Linly-Talker 演示前端 (web/), 端口 3100
+  # 会议秘书前端 (web-meeting/) 端口 3000
+  # 语音对话前端 (web-voice/) 端口 3001
+  web:
+    port: 3100
+    host: 0.0.0.0  # 0.0.0.0 允许外部访问，localhost 仅本地
+
+
+model:
+  type: wav2lip 
+  # 数字人形象 (data/avatars/<avatar_id>/)
+  #   wav2lip_secretary_weixin : 黑西装女秘书, 浅灰棚拍 (360×598), 微信视频 · 当前
+  #   wav2lip_secretary_blue   : 蓝衬衫, 木桌前 (360×560)   [B站 p11]
+  #   wav2lip_secretary_dress  : 抹胸礼服 (360×560)         [B站 p47]
+  #   wav2lip_secretary_jk     : JK 校服 站立全身           [B站 p22]
+  #   wav2lip_secretary        : 旧形象 (544×960)
+  avatar_id: wav2lip_secretary_weixin
+  batch_size: 2  # 减小批大小降低口型延迟 (2~4, 越大延迟越高)
+  model_path: ./models
+
+tts:
+  type: edgetts  # 开发环境使用免费的 EdgeTTS
+  ref_file: zh-CN-XiaoxiaoNeural  # 女声（晓晓）；男声可用 zh-CN-YunxiNeural
+
+asr:
+  mode: auto  # browser | server | auto (会议秘书前端: Chrome 用浏览器识别, 否则服务端)
+  type: whisper  # whisper | funasr
+  model_size: tiny  # tiny 更快; base 更准
+  language: zh  # zh | en | auto
+  device: cuda  # auto | cpu | cuda
+
+llm:
+  api_key: ${DASHSCOPE_API_KEY}
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+  model: qwen-plus
+
+audio:
+  fps: 50
+  sample_rate: 16000
+
+video:
+  width: 360       # 缩小输出, CPU 编码压力小一些
+  height: 360
+  fps: 25          # Wav2Lip 口型帧率 = audio.fps/2 (50/2=25), 勿低于此值
+
+custom_video:
+  config_path: ''
