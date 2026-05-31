@@ -11,6 +11,7 @@
     :mic-error="micError"
     @session="onSession"
     @toggle-mic="toggleMic"
+    @send-text="onSendText"
     @interrupt="onInterrupt"
     @logout="onLogout"
   />

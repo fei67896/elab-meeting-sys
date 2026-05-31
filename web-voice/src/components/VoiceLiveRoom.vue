@@ -94,52 +94,69 @@
         </div>
 
         <div class="live-stage__dock">
-          <div class="live-stage__controls">
+          <div v-if="state !== 'connected' && state !== 'connecting'" class="live-stage__controls">
             <button
-              v-if="state !== 'connected' && state !== 'connecting'"
               type="button"
               class="live-ctrl__btn live-ctrl__btn--primary"
               @click="connect"
             >
               {{ state === 'failed' ? '重新连接' : '连接数字人' }}
             </button>
+          </div>
+
+          <form v-else class="dy-composer" @submit.prevent="onTextSubmit">
+            <div class="dy-composer__box" :class="{ 'is-busy': busy && !listening }">
+              <input
+                v-model="draft"
+                class="dy-composer__input"
+                type="text"
+                enterkeyhint="send"
+                autocomplete="off"
+                placeholder="说点什么…"
+                :disabled="inputDisabled"
+              />
+              <button
+                v-if="hasDraft"
+                type="submit"
+                class="dy-composer__send"
+                :disabled="inputDisabled"
+              >
+                发送
+              </button>
+            </div>
 
             <button
-              v-else-if="showInterruptBtn"
+              v-if="showInterruptBtn"
               type="button"
-              class="live-ctrl__btn live-ctrl__btn--mic live-ctrl__btn--interrupt"
+              class="dy-composer__fab dy-composer__fab--stop"
               title="打断播报"
               @click="onInterruptClick"
             >
-              <span class="live-ctrl__icon live-ctrl__icon--stop">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
-                  <rect x="6" y="6" width="12" height="12" rx="2" />
-                </svg>
-              </span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <rect x="6" y="6" width="12" height="12" rx="2" />
+              </svg>
             </button>
 
             <button
               v-else
               type="button"
-              class="live-ctrl__btn live-ctrl__btn--mic"
-              :class="{ 'is-listening': listening, 'is-disabled': micDisabled }"
+              class="dy-composer__fab"
+              :class="{ 'is-recording': listening, 'is-disabled': micDisabled }"
               :disabled="micDisabled"
               :title="micTitle"
               @click="onMicClick"
             >
-              <span v-if="listening" class="live-ctrl__ring" :style="ringStyle" />
-              <span class="live-ctrl__icon" :class="{ 'is-recording': listening }">
-                <svg v-if="listening" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-                  <rect x="6" y="6" width="12" height="12" rx="2" />
-                </svg>
-                <svg v-else width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" />
-                  <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-                  <line x1="12" y1="19" x2="12" y2="22" />
-                </svg>
-              </span>
+              <span v-if="listening" class="dy-composer__pulse" :style="ringStyle" aria-hidden="true" />
+              <svg v-if="listening" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <rect x="6" y="6" width="12" height="12" rx="2" />
+              </svg>
+              <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z" />
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                <line x1="12" y1="19" x2="12" y2="22" />
+              </svg>
             </button>
-          </div>
+          </form>
         </div>
 
         <button
@@ -274,7 +291,10 @@ const props = defineProps({
   micError: { type: String, default: '' },
 })
 
-const emit = defineEmits(['session', 'state', 'toggle-mic', 'interrupt', 'logout'])
+const emit = defineEmits(['session', 'state', 'toggle-mic', 'send-text', 'interrupt', 'logout'])
+
+const draft = ref('')
+const hasDraft = computed(() => draft.value.trim().length > 0)
 
 const videoEl = ref(null)
 const { onVideoMetadata, frameStyle } = useAvatarFrameAspect(videoEl)
@@ -293,9 +313,10 @@ const showInterruptBtn = computed(
   () => props.avatarReady && !props.listening && props.busy
 )
 const micDisabled = computed(() => !props.avatarReady)
+const inputDisabled = computed(() => !props.avatarReady || (props.busy && !props.listening))
 const micTitle = computed(() => {
   if (!props.avatarReady) return '请先连接数字人'
-  return props.listening ? '结束并发送' : '按住说话'
+  return props.listening ? '结束并发送' : '语音输入'
 })
 const ringStyle = computed(() => ({
   transform: `scale(${1 + props.level * 0.4})`,
@@ -310,6 +331,14 @@ function onMicClick() {
 function onInterruptClick() {
   unmute()
   emit('interrupt')
+}
+
+function onTextSubmit() {
+  const t = draft.value.trim()
+  if (!t || inputDisabled.value) return
+  draft.value = ''
+  unmute()
+  emit('send-text', t)
 }
 
 function onStageClick() {
@@ -767,7 +796,7 @@ onBeforeUnmount(() => {
   right: 0;
   bottom: 0;
   z-index: 5;
-  padding: 0 var(--space-4) max(var(--space-4), env(safe-area-inset-bottom));
+  padding: 0 var(--space-3) max(10px, env(safe-area-inset-bottom));
 }
 
 /* 对话区：自下向上，超过画面中线处淡出 */
@@ -776,7 +805,7 @@ onBeforeUnmount(() => {
   left: var(--space-4);
   right: var(--space-4);
   top: 42%;
-  bottom: 100px;
+  bottom: 56px;
   z-index: 3;
   pointer-events: none;
   overflow: hidden;
@@ -801,18 +830,135 @@ onBeforeUnmount(() => {
   align-items: flex-end;
   justify-content: center;
   gap: var(--space-4);
-  min-height: 88px;
-  padding-bottom: var(--space-1);
+  min-height: 44px;
+  padding-bottom: 2px;
 }
 
+/* 抖音风底部：深色胶囊输入 + 右侧圆形麦 */
+.dy-composer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.dy-composer__box {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 4px 0 14px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+.dy-composer__box:focus-within {
+  background: rgba(0, 0, 0, 0.48);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+.dy-composer__box.is-busy {
+  opacity: 0.72;
+}
+
+.dy-composer__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.96);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  outline: none;
+}
+.dy-composer__input::placeholder {
+  color: rgba(255, 255, 255, 0.48);
+}
+.dy-composer__input:disabled {
+  cursor: not-allowed;
+}
+
+.dy-composer__send {
+  flex-shrink: 0;
+  height: 30px;
+  padding: 0 12px;
+  margin-right: 2px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #fe2c55;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.dy-composer__send:hover:not(:disabled) {
+  opacity: 0.85;
+}
+.dy-composer__send:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.dy-composer__fab {
+  position: relative;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.dy-composer__fab:hover:not(:disabled) {
+  transform: scale(1.06);
+  background: rgba(0, 0, 0, 0.5);
+}
+.dy-composer__fab.is-recording {
+  background: #fe2c55;
+  border-color: #fe2c55;
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(254, 44, 85, 0.28);
+}
+.dy-composer__fab--stop {
+  background: rgba(254, 44, 85, 0.92);
+  border-color: rgba(254, 44, 85, 0.92);
+  color: #fff;
+}
+.dy-composer__fab.is-disabled,
+.dy-composer__fab:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.dy-composer__pulse {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid rgba(254, 44, 85, 0.75);
+  pointer-events: none;
+  transition: transform 80ms linear, opacity 80ms linear;
+}
 .live-ctrl__btn {
   border: 0;
   cursor: pointer;
   font-family: var(--font-sans);
-}
-.live-ctrl__btn--interrupt .live-ctrl__icon--stop {
-  background: rgba(220, 38, 38, 0.92);
-  color: #fff;
 }
 .live-ctrl__btn--primary {
   align-self: center;
@@ -824,47 +970,6 @@ onBeforeUnmount(() => {
   font-weight: 600;
 }
 
-.live-ctrl__btn--mic {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0;
-  background: transparent;
-  color: #fff;
-}
-.live-ctrl__btn--mic.is-disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-.live-ctrl__icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.96);
-  color: var(--color-text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.28);
-}
-.live-ctrl__icon.is-recording,
-.live-ctrl__btn--mic.is-listening .live-ctrl__icon {
-  background: var(--color-accent);
-  color: #fff;
-}
-.live-ctrl__ring {
-  position: absolute;
-  top: -8px;
-  left: 50%;
-  width: 80px;
-  height: 80px;
-  margin-left: -40px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.9);
-  pointer-events: none;
-  transition: transform 80ms linear, opacity 80ms linear;
-}
 .live-stage__unmute {
   position: absolute;
   left: 50%;
@@ -899,7 +1004,7 @@ onBeforeUnmount(() => {
   position: absolute;
   left: var(--space-4);
   right: var(--space-4);
-  bottom: calc(100px + env(safe-area-inset-bottom));
+  bottom: calc(56px + env(safe-area-inset-bottom));
   z-index: 6;
   margin: 0;
   padding: 8px 12px;
