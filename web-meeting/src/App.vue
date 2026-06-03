@@ -32,7 +32,7 @@
       </router-view>
     </main>
 
-    <footer v-if="showChrome" class="app-footer">
+    <footer v-if="showFooter" class="app-footer">
       <div class="app-footer__inner">
         <span class="text-tiny text-dim">
           Linly-Talker-Stream &middot; Meeting Secretary &middot; Apache-2.0
@@ -58,7 +58,8 @@ const nav = computed(() => {
   if (isOwner.value) {
     return [
       { path: '/', label: '工作台' },
-      { path: '/douyin', label: '移动秘书' },
+      { path: '/mini', label: '小程序' },
+      { path: '/voice', label: '会议秘书' },
       { path: '/meetings', label: '会议管理' },
       { path: '/history', label: '历史查询' },
       { path: '/settings', label: '设置' },
@@ -72,7 +73,8 @@ const nav = computed(() => {
     items.push({ path: `/invite/${guestCtx.value.share_token}`, label: '我的会议' })
   }
   items.push(
-    { path: '/douyin', label: '移动秘书' },
+    { path: '/mini', label: '小程序' },
+    { path: '/voice', label: '会议秘书' },
     { path: '/history', label: '历史查询' },
     { path: '/settings', label: '设置' },
   )
@@ -84,9 +86,13 @@ const isActive = (path) => {
   return route.path.startsWith(path)
 }
 
-// 登录页/邀请页隐藏 chrome
+// 登录页/邀请页隐藏 chrome；会议秘书等页面可保留顶栏、隐藏底栏
 const showChrome = computed(() => {
   return isAuthed.value && route.name !== 'login' && !route.meta.immersive
+})
+
+const showFooter = computed(() => {
+  return showChrome.value && !route.meta.hideFooter
 })
 
 const onLogout = async () => {
@@ -178,14 +184,32 @@ const onLogout = async () => {
   flex: 1;
   width: 100%;
 }
-.app:has(.ai-mobile) {
+.app:has(.ai-mobile),
+.app:has(.wx-mini) {
   min-height: 100dvh;
   background: var(--color-surface);
+  overflow: hidden;
 }
-.app:has(.ai-mobile) .app-main {
+.app:has(.ai-mobile) .app-main,
+.app:has(.wx-mini) .app-main {
   flex: 1;
   min-height: 0;
   padding: 0;
+  overflow: hidden;
+}
+
+.app:has(.live-room) {
+  min-height: 100dvh;
+  background: var(--color-surface);
+  overflow: hidden;
+}
+.app:has(.live-room) .app-main {
+  flex: 1;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-footer {

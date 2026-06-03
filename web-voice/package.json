@@ -1,12 +1,12 @@
 {
   "name": "linly-talker-stream-voice",
   "version": "0.1.0",
-  "description": "语音对话数字人前端 - 浅色沉浸式",
+  "description": "[DEPRECATED] 已合并至 web-meeting，见 web-voice/README.md",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "node -e \"console.error('\\n❌ web-voice 已停用。请改用 web-meeting:\\n   cd ../web-meeting && npm run dev\\n   会议秘书: https://localhost:3000/#/voice\\n');process.exit(1)\"",
+    "build": "node -e \"console.error('web-voice 已停用，请 build web-meeting');process.exit(1)\"",
+    "preview": "node -e \"console.error('web-voice 已停用，请 preview web-meeting');process.exit(1)\""
   },
   "dependencies": {
     "axios": "^1.7.0",

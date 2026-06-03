@@ -22,6 +22,18 @@ const routes = [
     meta: { title: '工作台', owner: true },
   },
   {
+    path: '/mini',
+    name: 'mini',
+    component: () => import('./views/MiniProgram.vue'),
+    meta: { title: '小程序演示', immersive: true },
+  },
+  {
+    path: '/voice',
+    name: 'voice',
+    component: () => import('./views/VoiceHome.vue'),
+    meta: { title: '会议秘书', hideFooter: true },
+  },
+  {
     path: '/douyin',
     name: 'douyin',
     component: () => import('./views/DouyinFeed.vue'),

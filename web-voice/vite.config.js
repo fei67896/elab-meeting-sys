@@ -32,7 +32,7 @@ const proxy = Object.fromEntries(
 )
 
 console.log('┌─────────────────────────────────────────────┐')
-console.log('│  语音秘书前端 - web-voice                     │')
+console.log('│  会议秘书前端 - web-voice [已停用]            │')
 console.log('├─────────────────────────────────────────────┤')
 console.log(`│  端口:   ${String(PORT).padEnd(34)} │`)
 console.log(`│  HTTPS:  ${(useHttps ? '是 (自签名)' : '否').padEnd(34)} │`)

@@ -1,0 +1,14 @@
+/* 微信小程序风格变量 */
+.wx-mini {
+  --wx-green: #07c160;
+  --wx-green-soft: rgba(7, 193, 96, 0.12);
+  --wx-bg: #ededed;
+  --wx-card: #ffffff;
+  --wx-text: #191919;
+  --wx-text-2: #888888;
+  --wx-border: rgba(0, 0, 0, 0.08);
+  --wx-radius: 8px;
+  --wx-phone-w: 390px;
+  --wx-tab-h: 52px;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+}

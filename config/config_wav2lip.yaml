@@ -7,9 +7,10 @@ app:
   ssl_cert: ssl_certs/localhost.crt
   ssl_key: ssl_certs/localhost.key
   
-  # 原 Linly-Talker 演示前端 (web/), 端口 3100
-  # 会议秘书前端 (web-meeting/) 端口 3000
-  # 语音对话前端 (web-voice/) 端口 3001
+  # 会议秘书统一前端 (web-meeting/) 端口 3000
+  #   /#/voice  会议秘书（原 web-voice :3001，已合并）
+  #   /#/douyin 移动秘书
+  # 原 Linly-Talker 演示前端 (web/) 端口 3100
   web:
     port: 3100
     host: 0.0.0.0  # 0.0.0.0 允许外部访问，localhost 仅本地

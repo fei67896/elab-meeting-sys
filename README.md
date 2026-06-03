@@ -11,29 +11,28 @@
 |------|------|
 | **会议秘书 Agent** | 通义千问 function calling，支持创建/查询/取消会议、议程、参会人、指令历史等 |
 | **MCP 能力映射** | 工具调用结果映射为预订 / 议程 / 查询 / 历史等结构化展示 |
-| **web-meeting** `:3000` | 工作台、会议管理、历史查询（含老系统专注度/情绪/行为） |
-| **web-voice** `:3001` | 直播式语音对话界面，数字人居中，外侧贴边展开「已定会议」「专注历史」侧栏 |
+| **web-meeting** `:3000` | 统一前端：工作台、会议管理、历史查询、**会议秘书**（`#/voice`）、移动秘书（`#/douyin`） |
 | **数字人推流** | WebRTC + Wav2Lip，EdgeTTS 女声播报，口型与字幕近似同步 |
 | **语音识别** | 默认服务端 Whisper（`medium`）；Edge 等浏览器走 MediaRecorder + `/api/transcribe` |
 
-### web-voice 界面要点
+### 会议秘书（`#/voice`）界面要点
 
 - 数字人窗口固定居中，左右侧栏向外展开，半透明毛玻璃样式
-- 左侧 **已定会议**：滚动列表，一键跳转会议台详情
+- 左侧 **已定会议**：滚动列表，一键跳转会议详情
 - 右侧 **专注历史**：最近检测会议的专注度迷你曲线
+- 底部抖音风输入栏：打字 + 麦克风，播报中可打断
 - 顶栏复旦大学 Logo +「会议秘书」标题
 - 页脚 DEMO 标注与开源库致谢
 
 ## 系统架构
 
 ```text
-┌─────────────────┐     ┌─────────────────┐
-│  web-meeting    │     │   web-voice     │
-│  (Vue3 :3000)   │     │  (Vue3 :3001)   │
-└────────┬────────┘     └────────┬────────┘
-         │    HTTPS 代理 /api     │
-         └──────────┬─────────────┘
-                    ▼
+┌─────────────────────────────────────────┐
+│           web-meeting (Vue3 :3000)       │
+│  / 工作台  /meetings  /history  /voice   │
+└────────────────────┬────────────────────┘
+                     │  HTTPS 代理 /api
+                     ▼
          ┌──────────────────────┐
          │  Python 后端 :3080     │
          │  WebRTC / TTS / ASR    │
@@ -52,8 +51,8 @@ elab-meeting-sys/
 ├── src/
 │   ├── server/                  # aiohttp + WebRTC 服务
 │   └── meeting/                 # 会议 CRUD、Agent intent、MCP 注册、Legacy 专注度
-├── web-meeting/                 # 会议台前端
-├── web-voice/                   # 语音直播前端
+├── web-meeting/                 # 统一前端（含会议秘书 #/voice）
+├── web-voice/                   # [已停用] 旧独立前端，见 web-voice/README.md
 ├── scripts/                     # 安装与启动脚本
 ├── models/                      # Wav2Lip 模型权重（Git LFS）
 └── data/                        # 数字人素材、会议数据库
@@ -126,19 +125,22 @@ python src/server/app.py --config config/config_wav2lip.yaml
 
 ### 4. 启动前端
 
-**会议台**（管理、历史、专注度详情）：
+只需启动 **一个** 前端应用：
 
 ```bash
 cd web-meeting && npm install && npm run dev
 # https://localhost:3000
 ```
 
-**语音秘书**（直播式语音 + 数字人）：
+| 页面 | 地址 |
+|------|------|
+| 工作台 | https://localhost:3000/#/ |
+| 会议秘书（数字人直播） | https://localhost:3000/#/voice |
+| 会议管理 | https://localhost:3000/#/meetings |
+| 历史查询 | https://localhost:3000/#/history |
+| 移动秘书 | https://localhost:3000/#/douyin |
 
-```bash
-cd web-voice && npm install && npm run dev
-# https://localhost:3001
-```
+> `web-voice`（`:3001`）已合并进 `web-meeting`，**无需再启动**。
 
 默认账号见 `src/meeting/db.py` 初始化逻辑（owner 用户 seed，如 `zhaoyifei` / `123456`）。
 
